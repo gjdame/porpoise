@@ -3,7 +3,7 @@
     --------------
     Shows how to authorize users with Github.
 """
-from flask import Flask, request, g, session, redirect, url_for
+from flask import Flask, request, g, session, redirect, url_for, jsonify
 from flask import render_template_string
 from flask_github import GitHub
 
@@ -22,6 +22,7 @@ GITHUB_CLIENT_SECRET = '989605368ed211c6f7472372c7c9111895d45eca'
 # setup flask
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 # setup github-flask
 github = GitHub(app)
@@ -122,9 +123,12 @@ def user():
 @app.route('/repo')
 def repos_list():
     a = github.get('user')
-    url = a['repos_url']
-    b = github.get('Syssos/repos')
-    return str(b)
+    b = github.get('user/repos')
+    keys = {"User": a, "repos": b}
+    # url = a['repos_url']
+    # print (url + '/stats/commit_activity')
+    # b = github.get(url + '/stats/commit_activity')
+    return jsonify(keys)
 
 
 if __name__ == '__main__':
