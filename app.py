@@ -120,7 +120,7 @@ def user():
     return str(a['name'])
 
 
-@app.route('/repo')
+@app.route('/repo', methods=["GET"])
 def repos_list():
     a = github.get('user')
     b = github.get('user/repos')
