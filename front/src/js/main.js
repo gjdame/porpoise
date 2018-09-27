@@ -1,13 +1,80 @@
+// Handlers {
+  function handleRepoClick (e) {
+    e.preventDefault()
+    const baseUrl = window.location.origin
+    const repoName = e.target.getAttribute('data-full_name')
+
+    const repoURL = e.target.getAttribute('data-url')
+
+    loadRepoView(repoURL)
+    // loadRepoView(`${baseUrl}/${repoName}`)
+    window.location.href = baseUrl + '#' + repoName
+  }
+// Handlers END }
+
+// Views {
+  function loadHomeView (e) {
+    e.preventDefault()
+    console.log("loadHomeView")
+    const baseUrl = window.location.origin
+    window.location = baseUrl
+  }
+
+  function loadRepoView (repoURL) {
+
+    fetch(`${repoURL}/stats/commit_activity`)
+    // fetch(window.location.origin + '/src/js/mock-repo-activity.json')
+      .then(res => {
+        return res.json()
+      })
+      .then(activities => {
+        if (!activities.length) {
+          loadRepoView(repoURL)
+          return
+        }
+
+        const actDiv = document.getElementById('stage')
+        const acts = ['<div id="repo-activity" class="column"><div class="repo-activity-wrapper">']
+
+        activities.forEach(act => {
+          acts.push('<ul>')
+          act.days.forEach(day => {
+            let className = 'grey-zero'
+
+            if (day > 0) {
+              className = 'green'
+            }
+
+            acts.push(`<li class="${className}"></li>`)
+          })
+          acts.push('</ul>')
+        });
+        acts.push('</div></div>')
+
+        actDiv.innerHTML = acts.join('')
+      })
+  }
+// Views END }
+
+
+// Everything begins here
 window.onload = () => {
-  const h2 = document.createElement('h2')
-
-  // h2.innerText = 'GitHub User Explorer'
-  // document.body.appendChild(h2)
-
   const username = "Cu7ious"
-  // const url = '//porpoise.holberton.us'
+  // const actualUrl = '//porpoise.holberton.us'
 
+  // To grab user & repos
   // fetch(url + '/repo', {method: 'POST'})
+      // .then(res => {
+      //   return res.json()
+      // })
+      // .then(data => {
+      //   const { user, repos } = data
+      //   console.log(data)
+      // })
+
+  // To log out
+  // fetch(url + '/logout', {method: 'POST'})
+
   fetch(`https://api.github.com/users/${username}`)
     .then(res => {
       return res.json()
@@ -85,12 +152,10 @@ window.onload = () => {
                   })
               }
 
-              const {
-                full_name,
-                html_url
-              } = repo
+              const { html_url, url } = repo
 
               let {
+                full_name,
                 private,
                 fork,
                 forks,
@@ -99,9 +164,20 @@ window.onload = () => {
                 updated_at
               } = repo
 
+              full_name = full_name.split(username + '/')[1]
+
               reposDiv.innerHTML = reposDiv.innerHTML + `
                 <article>
-                  <h5><a href="${html_url}">${full_name}</a></h5>
+                  <h5>
+                    <a
+                      data-full_name="${full_name}"
+                      data-url="${url}"
+                      href="#"
+                      onClick="handleRepoClick(event)"
+                    >
+                      ${full_name}
+                    </a>
+                  </h5>
                   <div class="tags">
                       ${private}
                       ${fork}

@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Porpoise</title>
+    <link rel="stylesheet" href="src/css/styles.css">
 </head>
 <body>
 
     <header>
+        <p>
+            <a href="#" onclick="loadHomeView(event)">Back home</a>
+        </p>
+
         <h1 id="logo">Porpoise</h1>
+
         <form id="credentials" action="">
-            <button>Login</button>
+            <button>Log Out</button>
         </form>
     </header>
 
-    <section>
+    <section id="stage">
         <div id="user" class="column"></div>
         <div id="repos" class="column"></div>
     </section>
