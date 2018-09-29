@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 """
     GitHub Example
     --------------
     Shows how to authorize users with Github.
 """
 from flask import Flask, request, g, session, redirect, url_for, jsonify
-from flask import render_template_string
+from flask import render_template_string, render_template
 from flask_github import GitHub
 
 from sqlalchemy import create_engine, Column, Integer, String
@@ -64,16 +65,21 @@ def after_request(response):
     return response
 
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
     if g.user:
-        t = 'Hello! <a href="{{ url_for("user") }}">Get user</a> ' \
-            '<a href="{{ url_for("logout") }}">Logout</a>'
+        a = github.get('user')
+        b = github.get('user/repos')
+        keys = {"user": a, "repos": b}
+        keys = jsonify(keys)
+        return render_template('index.html', user=keys, login=a['login'])
+        #t = 'Hello! <a href="{{ url_for("user") }}">Get user</a> ' \
+        #    '<a href="{{ url_for("logout") }}">Logout</a>'
     else:
-        t = 'Hello! <a href="{{ url_for("login") }}">Login</a>'
+        return render_template('test.html')
+        #t = 'Hello! <a href="{{ url_for("login") }}">Login</a>'
 
-    return render_template_string(t)
-
+    #return render_template_string(t)
 
 @github.access_token_getter
 def token_getter():
@@ -117,14 +123,14 @@ def logout():
 @app.route('/user')
 def user():
     a = github.get('user')
-    return str(a['name'])
+    return str(a['login'])
 
 
 @app.route('/repo', methods=["GET"])
 def repos_list():
     a = github.get('user')
     b = github.get('user/repos')
-    keys = {"User": a, "repos": b}
+    keys = {"user": a, "repos": b}
     # url = a['repos_url']
     # print (url + '/stats/commit_activity')
     # b = github.get(url + '/stats/commit_activity')
@@ -133,4 +139,4 @@ def repos_list():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run()

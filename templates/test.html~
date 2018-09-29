@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Porpoise</title>
+    <link rel="stylesheet" href="/static/styles/css/styles.css">
+  </head>
+  <body>
+
+   <center> <img src="https://c402277.ssl.cf1.rackcdn.com/photos/7505/images/story_full_width/Wang_Xiaoqiang_%28IHB%29.jpg?1412017255"><br><h2>Please login to Github</h2></center>
+    <form id="credentials" action="/login">
+      <button>Log In</button>
+    </form>
+
+
+
+  </body>
+  </html>

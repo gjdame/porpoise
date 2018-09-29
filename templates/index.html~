@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Porpoise</title>
+    <link rel="stylesheet" href="{{ url_for('.static', filename='styles/css/styles.css') }}">
+</head>
+<body>
+
+{% if user %}
+    <header>
+      <p>
+	{{ login }}
+            <a href="#" onclick="loadHomeView(event)">Back home</a>
+        </p>
+
+        <h1 id="logo">Porpoise</h1>
+
+        <form id="credentials" action="/logout">
+            <button>Log Out</button>
+        </form>
+    </header>
+
+    <section id="stage">
+        <div id="user" class="column"></div>
+        <div id="repos" class="column"></div>
+    </section>
+
+    <script src="{{ url_for('.static', filename='scripts/js/main.js') }}"></script>
+
+{% else %}
+        <form id="credentials" action="/login">
+            <button>Log In</button>
+        </form>
+{% endif %}
+    
+    
+</body>
+</html>
